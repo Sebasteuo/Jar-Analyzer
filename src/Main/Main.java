@@ -38,6 +38,8 @@ public class Main {
 		graph.printGraph();
 		System.out.println("Vertex: " + graph.getNumVert());
 		System.out.println("Edges: " + graph.getNumEdges());*/
+		/*Display display = new Display();
+		display.setVisible(true);*/
 	}
 
 }
