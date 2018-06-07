@@ -133,6 +133,34 @@ public class Graph {
         }
 	}
 	
+	public SimpleLinkedList getGraphVertexList() {
+		SimpleLinkedList res = new SimpleLinkedList();
+		Node current = adjList.getFlag();
+		while(current != null) {
+			SimpleLinkedList temp = (SimpleLinkedList) current.getData();
+			res.insertEnd(((Vertex) temp.getFlag().getData()));
+			current = current.getNext();
+		}
+		return res;
+	}
+	
+	public SimpleLinkedList getGraphEdgesList() {
+		SimpleLinkedList res = new SimpleLinkedList();
+		Node current = adjList.getFlag();
+		while(current != null) {
+			SimpleLinkedList temp = (SimpleLinkedList) current.getData();
+			Node current2 = temp.getFlag();
+			Vertex src = (Vertex) current2.getData();
+			while(current2.getNext() != null) {
+				Vertex dest = (Vertex) current2.getNext().getData();
+				res.insertEnd(src.getEdge(dest));
+				current2 = current2.getNext();
+			}
+			current = current.getNext();
+		}
+		return res;
+	}
+	
     public void printGraph(){
     	Node current = adjList.getFlag();
         while(current != null){

@@ -8,10 +8,26 @@ public class Vertex {
 	private SimpleLinkedList edges;
 	private boolean isVisited;
 	
+	private String name;
+	private int coordX;
+	private int coordY;
+	
 	public Vertex(Object data) {
 		this.data = data;
 		this.edges = new SimpleLinkedList();
 		this.isVisited = false;
+		this.setName("");
+		this.setCoordX(0);
+		this.setCoordY(0);
+	}
+	
+	public Vertex(Object data, String name, int coordX, int coordY) {
+		this.data = data;
+		this.edges = new SimpleLinkedList();
+		this.isVisited = false;
+		this.setName(name);
+		this.setCoordX(coordX);
+		this.setCoordY(coordY);
 	}
 	
 	public Object getData() {
@@ -28,6 +44,30 @@ public class Vertex {
 
 	public void setVisited(boolean isVisited) {
 		this.isVisited = isVisited;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getCoordX() {
+		return coordX;
+	}
+
+	public void setCoordX(int coordX) {
+		this.coordX = coordX;
+	}
+
+	public int getCoordY() {
+		return coordY;
+	}
+
+	public void setCoordY(int coordY) {
+		this.coordY = coordY;
 	}
 
 	public void addEdge(Vertex dest, int weight) {

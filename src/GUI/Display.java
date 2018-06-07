@@ -1,15 +1,22 @@
-package display;
+package GUI;
 
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.DefaultDesktopManager;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+import GraphStructure.Graph;
 
 @SuppressWarnings("serial")
 public class Display extends JFrame implements ActionListener {
@@ -19,10 +26,12 @@ public class Display extends JFrame implements ActionListener {
 	private JTextField box;
 	private JButton boxanalyze;
 	private JButton boxsearch;
+	private Graph graph;
 
 	// Constructor
-	public Display() {
+	public Display(Graph graph) {
 		super();
+		this.graph = graph;
 		configurarVentana();
 		inicializarComponentes();
 	}
@@ -76,7 +85,22 @@ public class Display extends JFrame implements ActionListener {
 					File file = new File(box.getText());
 					if (file.exists()) {*/
 						DisplayAnalyzer analyzer = new DisplayAnalyzer(box.getText());
+						JDesktopPane dp = new JDesktopPane();
+				    	dp.setDesktopManager( new ImmovableDesktopManager());
+				    	analyzer.getContentPane().add(dp);
+						
+						GraphDraw draw = new GraphDraw(this.graph);
+						
+						draw.pack();
+						draw.setSize(750,661);
+						draw.putClientProperty("dragMode", "fixed");
+						dp.add(draw);
+						
+						analyzer.setSize(1000, 700);
 						analyzer.setVisible(true);
+						analyzer.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+						
+						draw.setVisible(true);
 						dispose();
 					/*} else {
 						JOptionPane.showMessageDialog(this, "The entered route is not valid", "Error", 0);
@@ -101,4 +125,14 @@ public class Display extends JFrame implements ActionListener {
 				System.out.println("No Selecciono Archivo");
 		}
 	}
+}
+
+@SuppressWarnings("serial")
+class ImmovableDesktopManager extends DefaultDesktopManager {
+    
+	public void dragFrame(JComponent f, int newX, int newY)
+    {
+        if (!"fixed".equals(f.getClientProperty("dragMode")))
+            super.dragFrame(f, newX, newY);
+    }
 }
