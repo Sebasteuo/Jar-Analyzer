@@ -84,7 +84,7 @@ public class Display extends JFrame implements ActionListener {
 				if (box.getText().substring(box.getText().length() - 3, box.getText().length()).equals("jar")) {
 					File file = new File(box.getText());
 					if (file.exists()) {*/
-						DisplayAnalyzer analyzer = new DisplayAnalyzer();
+						DisplayAnalyzer analyzer = new DisplayAnalyzer(this.graph.getGraphVertexList());
 						JDesktopPane dp = new JDesktopPane();
 				    	dp.setDesktopManager( new ImmovableDesktopManager());
 				    	analyzer.getContentPane().add(dp);

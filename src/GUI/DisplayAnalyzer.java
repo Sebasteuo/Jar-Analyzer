@@ -12,19 +12,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import GraphStructure.Vertex;
+import LinkedListStructure.Node;
+import LinkedListStructure.SimpleLinkedList;
+
 @SuppressWarnings("serial")
 public class DisplayAnalyzer extends JFrame implements ActionListener {
 	private JButton back;
 	private JLabel information;
 	private JComboBox<String> menu;
 	private String[] nodes;
-	private JButton ranking;
+	private JButton rankingD;
+	private JButton rankingR;
 	private JButton options;
 
 	// Constructor
-	public DisplayAnalyzer() {
+	public DisplayAnalyzer(SimpleLinkedList list) {
 		super();
 		configurarVentana();
+		this.nodes = convertir(list);
 		inicializarComponentes();
 	}
 
@@ -37,7 +43,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 		// Elimina los bordes de la ventana
 		// this.setUndecorated(true);
-		//this.setLayout(null);
+		// this.setLayout(null);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Icono de la ventana
@@ -47,55 +53,68 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 	// Inicia los componentes
 	private void inicializarComponentes() {
 		// Da valor a los componentes
-				back = new JButton();
-				information = new JLabel();
-				nodes = new String[] { "Option1", "Option2", "Option3", "Option4", "Option5" };
-				menu = new JComboBox<String>(nodes);
-				ranking = new JButton();
-				options = new JButton();
-				// Configuracion del boton
-				information.setText("<html><body>Grado saliente: <br>" + nodes[0] + "<br>Grado entrante: <br>" + nodes[0]
-						+ "<br>Grafo conexo: <br>" + nodes[0] + "</body></html>");
-				information.setBounds(752, 50, 250, 210);
-				information.setFont(new Font("Algerian", 1, 24));
-				back.setText("Back");
-				back.setBounds(875, 625, 100, 25);
-				back.addActionListener(this);
-				back.setFocusable(false);
-				ranking.setText("Ranking");
-				ranking.setBounds(770, 280, 200, 25);
-				ranking.addActionListener(this);
-				ranking.setFocusable(false);
-				menu.setBounds(770, 20, 200, 25);
-				menu.addActionListener(this);
-				options.setText("Class Graph");
-				options.setBounds(770, 325, 200, 25);
-				options.addActionListener(this);
-				options.setFocusable(false);
-				// Añade lo componentes a la ventana
-				this.add(back);
-				this.add(information);
-				this.add(menu);
-				this.add(ranking);
-				this.add(options);
+		back = new JButton();
+		information = new JLabel();
+		menu = new JComboBox<String>(nodes);
+		rankingD = new JButton();
+		rankingR = new JButton();
+		options = new JButton();
+		// Configuracion del boton
+		information.setText("<html><body>Outgoing Grade: <br>" + nodes[0] + "<br>Incoming Grade: <br>" + nodes[0]
+				+ "<br>Connected Graph: <br>" + nodes[0] + "</body></html>");
+		information.setBounds(752, 50, 250, 210);
+		information.setFont(new Font("Algerian", 1, 23));
+		back.setText("Back");
+		back.setBounds(875, 625, 100, 25);
+		back.addActionListener(this);
+		back.setFocusable(false);
+		rankingD.setText("Dependences Ranking");
+		rankingD.setBounds(770, 280, 200, 25);
+		rankingD.addActionListener(this);
+		rankingD.setFocusable(false);
+		rankingR.setText("References Ranking");
+		rankingR.setBounds(770, 325, 200, 25);
+		rankingR.addActionListener(this);
+		rankingR.setFocusable(false);
+		menu.setBounds(770, 20, 200, 25);
+		menu.addActionListener(this);
+		options.setText("Class Graph");
+		options.setBounds(770, 370, 200, 25);
+		options.addActionListener(this);
+		options.setFocusable(false);
+		// Añade lo componentes a la ventana
+		this.add(back);
+		this.add(information);
+		this.add(menu);
+		this.add(rankingD);
+		this.add(rankingR);
+		this.add(options);
 	}
 
 	// Acciones de los botones
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == back) {
-			//Display display = new Display();
-			//display.setVisible(true);
-			//dispose();
+			// Display display = new Display();
+			// display.setVisible(true);
+			// dispose();
 		}
 		if (e.getSource() == menu) {
-			information.setText("<html><body>Grado saliente: <br>" + menu.getSelectedItem() + "<br>Grado entrante: <br>"
-					+ menu.getSelectedItem() + "<br>Grafo conexo: <br>" + menu.getSelectedItem() + "</body></html>");
+			information.setText("<html><body>Outgoing Grade: <br>" + menu.getSelectedItem() + "<br>Incoming Grade: <br>"
+					+ menu.getSelectedItem() + "<br>Connected Graph: <br>" + menu.getSelectedItem() + "</body></html>");
 		}
-		if (e.getSource() == ranking) {
-			Object[][] rows = { { "1", "", "" }, {"2", "", ""},{"3", "", ""} };
-			Object[] cols = { "Posicion", "Cantidad", "Nombre"};
+		if (e.getSource() == rankingD) {
+			Object[][] rows = { { "1", "", "" }, { "2", "", "" }, { "3", "", "" } };
+			Object[] cols = { "Position", "Quantity", "Name" };
 			JTable table = new JTable(rows, cols);
-			JOptionPane.showMessageDialog(this, new JScrollPane(table), "Ranking", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, new JScrollPane(table), "Dependences Ranking",
+					JOptionPane.PLAIN_MESSAGE);
+		}
+		if (e.getSource() == rankingR) {
+			Object[][] rows = { { "1", "", "" }, { "2", "", "" }, { "3", "", "" } };
+			Object[] cols = { "Position", "Quantity", "Name" };
+			JTable table = new JTable(rows, cols);
+			JOptionPane.showMessageDialog(this, new JScrollPane(table), "References Ranking",
+					JOptionPane.PLAIN_MESSAGE);
 		}
 		if (e.getSource() == options) {
 			if (options.getText() == "Class Graph") {
@@ -105,4 +124,17 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 			}
 		}
 	}
+
+	public String[] convertir(SimpleLinkedList list) {
+		String[] array = new String[list.getSize()];
+		Node current = list.getFlag();
+		int contador = 0;
+		while (current != null) {
+			array[contador] = ((Vertex)current.getData()).getName();
+			current = current.getNext();
+			contador++;
+		}
+		return array;
+	}
+
 }
