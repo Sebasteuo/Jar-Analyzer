@@ -161,6 +161,91 @@ public class Graph {
 		return res;
 	}
 	
+	public int getInputDegree(String name) {
+		int inputDegree = 0;
+		Node current = this.adjList.getFlag();
+		while(current != null) {
+			SimpleLinkedList temp = (SimpleLinkedList) current.getData();
+			Node current2 = temp.getFlag().getNext();
+			while(current2 != null) {
+				Vertex src = (Vertex) current2.getData();
+				if(src.getName().equalsIgnoreCase(name)) {
+					inputDegree++;
+				}
+				current2 = current2.getNext();
+			}
+			current = current.getNext();
+			
+		}
+		return inputDegree;
+	}
+	
+	public int getOutputDegree(String name) {
+		int outputDegree = 0;
+		Node current = this.adjList.getFlag();
+		while(current != null) {
+			SimpleLinkedList temp = (SimpleLinkedList) current.getData();
+			Vertex src = (Vertex) temp.getFlag().getData();
+			if(src.getName().equalsIgnoreCase(name)) {
+				outputDegree = src.getEdgesList().getSize();
+				break;
+			}
+			current = current.getNext();
+		}
+		return outputDegree;
+	}
+	
+	public boolean isRelated() {
+		return true;
+	}
+	
+	public String[][] getReferencesRanking() {
+		return getRanking("REF");
+	}
+	
+	public String[][] getDependencesRanking() {
+		return getRanking("DEP");
+	}
+	
+	private String[][] getRanking(String ranking) {
+		SimpleLinkedList temp = new SimpleLinkedList();
+		String[][] res = new String[adjList.getSize()][3];
+		int count = 0;
+		while(temp.getSize() != adjList.getSize()) {
+			Node current = adjList.getFlag();
+			while(temp.getData(current.getData()) != null) current = current.getNext();
+			Vertex vertex = (Vertex) ((SimpleLinkedList) current.getData()).getFlag().getData();
+			Node toInsert = current;
+			while(current.getNext() != null) {
+				if(temp.getData(current.getNext().getData()) == null) {
+					Vertex tempVertex = (Vertex) ((SimpleLinkedList) current.getNext().getData()).getFlag().getData();
+					if(ranking.equals("REF")) {
+						if(getInputDegree(vertex.getName()) <= getInputDegree(tempVertex.getName())) {
+							vertex = tempVertex;
+							toInsert = current.getNext();
+						}
+					}
+					if(ranking.equals("DEP")) {
+						if(getOutputDegree(vertex.getName()) <= getOutputDegree(tempVertex.getName())) {
+							vertex = tempVertex;
+							toInsert = current.getNext();
+						}
+					}
+				}
+				current = current.getNext();
+			}
+
+			res[count][0] = String.valueOf(count + 1);
+			res[count][1] = vertex.getName();
+			if(ranking.equals("REF")) res[count][2] = String.valueOf(getInputDegree(vertex.getName()));
+			if(ranking.equals("DEP")) res[count][2] = String.valueOf(getOutputDegree(vertex.getName()));
+			
+			temp.insertEnd(toInsert.getData());
+			count += 1;
+		}
+		return res;
+	}
+	
     public void printGraph(){
     	Node current = adjList.getFlag();
         while(current != null){

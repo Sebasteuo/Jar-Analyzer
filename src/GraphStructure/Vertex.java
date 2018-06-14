@@ -38,6 +38,10 @@ public class Vertex {
 		this.data = value;
 	}
 	
+	public SimpleLinkedList getEdgesList() {
+		return this.edges;
+	}
+	
 	public boolean isVisited() {
 		return isVisited;
 	}
