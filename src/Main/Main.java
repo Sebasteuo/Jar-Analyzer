@@ -59,9 +59,9 @@ public class Main {
 		/*System.out.println("");
 		graph.printGraph();
 		System.out.println("Vertex: " + graph.getNumVert());
-		System.out.println("Edges: " + graph.getNumEdges());
+		System.out.println("Edges: " + graph.getNumEdges());*/
 		Display display = new Display(graph);
-		display.setVisible(true);*/
+		display.setVisible(true);
 	}
 
 }

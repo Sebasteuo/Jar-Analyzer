@@ -11,7 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
+import GraphStructure.Graph;
 import GraphStructure.Vertex;
 import LinkedListStructure.Node;
 import LinkedListStructure.SimpleLinkedList;
@@ -25,12 +28,14 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 	private JButton rankingD;
 	private JButton rankingR;
 	private JButton options;
+	private Graph graph;
 
 	// Constructor
-	public DisplayAnalyzer(SimpleLinkedList list) {
+	public DisplayAnalyzer(Graph graph) {
 		super();
 		configurarVentana();
-		this.nodes = convertir(list);
+		this.nodes = convertir(graph.getGraphVertexList());
+		this.graph = graph;
 		inicializarComponentes();
 	}
 
@@ -60,8 +65,10 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		rankingR = new JButton();
 		options = new JButton();
 		// Configuracion del boton
-		information.setText("<html><body>Outgoing Grade: <br>" + nodes[0] + "<br>Incoming Grade: <br>" + nodes[0]
-				+ "<br>Connected Graph: <br>" + nodes[0] + "</body></html>");
+		information
+				.setText("<html><body>Outgoing Grade: <br>" + graph.getOutputDegree(menu.getSelectedItem().toString())
+						+ "<br>Incoming Grade: <br>" + graph.getInputDegree(menu.getSelectedItem().toString())
+						+ "<br>Connected Graph: <br>" + nodes[0] + "</body></html>");
 		information.setBounds(752, 50, 250, 210);
 		information.setFont(new Font("Algerian", 1, 23));
 		back.setText("Back");
@@ -69,17 +76,17 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		back.addActionListener(this);
 		back.setFocusable(false);
 		rankingD.setText("Dependences Ranking");
-		rankingD.setBounds(770, 280, 200, 25);
+		rankingD.setBounds(752, 280, 200, 25);
 		rankingD.addActionListener(this);
 		rankingD.setFocusable(false);
 		rankingR.setText("References Ranking");
-		rankingR.setBounds(770, 325, 200, 25);
+		rankingR.setBounds(752, 325, 200, 25);
 		rankingR.addActionListener(this);
 		rankingR.setFocusable(false);
-		menu.setBounds(770, 20, 200, 25);
+		menu.setBounds(752, 20, 200, 25);
 		menu.addActionListener(this);
 		options.setText("Class Graph");
-		options.setBounds(770, 370, 200, 25);
+		options.setBounds(752, 370, 200, 25);
 		options.addActionListener(this);
 		options.setFocusable(false);
 		// Añade lo componentes a la ventana
@@ -99,20 +106,34 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 			// dispose();
 		}
 		if (e.getSource() == menu) {
-			information.setText("<html><body>Outgoing Grade: <br>" + menu.getSelectedItem() + "<br>Incoming Grade: <br>"
-					+ menu.getSelectedItem() + "<br>Connected Graph: <br>" + menu.getSelectedItem() + "</body></html>");
+			information.setText(
+					"<html><body>Outgoing Grade: <br>" + graph.getOutputDegree(menu.getSelectedItem().toString())
+							+ "<br>Incoming Grade: <br>" + graph.getInputDegree(menu.getSelectedItem().toString())
+							+ "<br>Connected Graph: <br>" + menu.getSelectedItem() + "</body></html>");
 		}
 		if (e.getSource() == rankingD) {
-			Object[][] rows = { { "1", "", "" }, { "2", "", "" }, { "3", "", "" } };
-			Object[] cols = { "Position", "Quantity", "Name" };
-			JTable table = new JTable(rows, cols);
+			Object[] cols = { "Position", "Name", "Quantity" };
+			JTable table = new JTable(graph.getDependencesRanking(), cols);
+			table.getTableHeader().setReorderingAllowed(false);
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(1).setPreferredWidth(300);
 			JOptionPane.showMessageDialog(this, new JScrollPane(table), "Dependences Ranking",
 					JOptionPane.PLAIN_MESSAGE);
 		}
 		if (e.getSource() == rankingR) {
-			Object[][] rows = { { "1", "", "" }, { "2", "", "" }, { "3", "", "" } };
-			Object[] cols = { "Position", "Quantity", "Name" };
-			JTable table = new JTable(rows, cols);
+			Object[] cols = { "Position", "Name", "Quantity" };
+			JTable table = new JTable(graph.getReferencesRanking(), cols);
+			table.getTableHeader().setReorderingAllowed(false);
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(1).setPreferredWidth(300);
 			JOptionPane.showMessageDialog(this, new JScrollPane(table), "References Ranking",
 					JOptionPane.PLAIN_MESSAGE);
 		}
@@ -130,7 +151,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		Node current = list.getFlag();
 		int contador = 0;
 		while (current != null) {
-			array[contador] = ((Vertex)current.getData()).getName();
+			array[contador] = ((Vertex) current.getData()).getName();
 			current = current.getNext();
 			contador++;
 		}
