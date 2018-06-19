@@ -56,7 +56,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		this.nodes = convert(graph.getGraphVertexList());
 		initializeComponents();
 		this.dp = new JDesktopPane();
-		generateGraph();
+		generateGraph("JAR");
 	}
 
 	/**
@@ -127,9 +127,9 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == back) {
-			// Display display = new Display();
-			// display.setVisible(true);
-			// dispose();
+			Display display = new Display();
+			display.setVisible(true);
+			dispose();
 		}
 		if (e.getSource() == menu) {
 			information.setText(
@@ -168,7 +168,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 				try {
 					Analyzer analyzer = new Analyzer(graph.getVertex(menu.getSelectedItem().toString()).getData().toString(), "CLASS");
 					this.graph = analyzer.getGraph();
-					generateGraph();
+					generateGraph("CLASS");
 					options.setText("Jar Graph");
 				} catch (ClassNotFoundException | JSONException e1) {
 					e1.printStackTrace();
@@ -185,7 +185,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 	/**
 	 * Genera el grafo del archivo ingresado
 	 */
-	public void generateGraph() {
+	public void generateGraph(String choice) {
     	dp.setDesktopManager(new ImmovableDesktopManager());
     	dp.setBackground(new Color(238,238,238));
     	this.getContentPane().add(dp);
@@ -193,7 +193,8 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
     	JInternalFrame JIF = new JInternalFrame();
     	JIF.setBorder(null);
 		GraphDraw draw = new GraphDraw(this.graph);
-		draw.setPreferredSize(new Dimension(1500,1000));
+		if(choice.equals("JAR")) draw.setPreferredSize(new Dimension(1500,1000));
+		else draw.setPreferredSize(new Dimension(2000,1500));
 		JIF.add(draw);
 		JScrollPane JSP = new JScrollPane(draw, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		JIF.getContentPane().add(JSP);

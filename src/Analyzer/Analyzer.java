@@ -10,7 +10,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
 
 import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
@@ -168,61 +167,73 @@ public class Analyzer {
 	 * @return JSON Obejct
 	 * @throws JSONException
 	 */
-	private Graph setUpClassGraph(JSONObject obj) throws JSONException {
+	private Graph setUpClassGraph(JSONObject obj) throws JSONException, ClassFormatException, IOException {
 		Graph graph = new Graph();
 		graph.setDirected(true);
 		
 		JSONArray listOfClass = obj.getJSONArray("List of Class");
-		SimpleLinkedList temp = new SimpleLinkedList();
-		int x;
-		int y;
-		int n = 0;
+		int nX = 0, nY = 0;
 		try {
+			int multX = 15, multY = 20;
 			for (int i = 0; i < listOfClass.length(); i++) {
 				String name = (String) ((JSONObject) listOfClass.get(i)).get("Name");
 				
-			    x = Integer.valueOf((int) Math.round(425 + Math.cos(n)*(listOfClass.length()*35)));
-				y = Integer.valueOf((int) Math.round(300 + Math.sin(n)*(listOfClass.length()*35)));
+			    int x = Integer.valueOf((int) Math.round(600 + Math.cos(nX)*(listOfClass.length()*multX)));
+				int y = Integer.valueOf((int) Math.round(350 + Math.sin(nY)*(listOfClass.length()*multY)));
+				
 				Vertex vertex = new Vertex(name, name, x, y);
-				temp.insertEnd(vertex.getName());
 				graph.addVertex(vertex);
 				
-				ClassParser classP = (ClassParser) ((JSONObject) listOfClass.get(i)).get("Class");
-				JavaClass jClass = classP.parse();
-				DependencyEmitter visitor = new DependencyEmitter(jClass);
-			    DescendingVisitor classWalker = new DescendingVisitor(jClass, visitor);
-			    classWalker.visit();
-			    
-				JSONArray arr = visitor.getJsonArr();
-				int mult = 5;
-				for (int j = 1; j < arr.length(); j++) {
-					String str = arr.getString(j);
-					if(temp.getData(str) == null && !str.contains("java.lang")) {
-						n += (Math.PI)/2;
-						if(n >= 2*Math.PI) {
-							n = 0;
-							mult += 1;
-						}
-						x = Integer.valueOf((int) Math.round(450 + Math.cos(n)*(listOfClass.length()*mult)));
-						y = Integer.valueOf((int) Math.round(330 + Math.sin(n)*(listOfClass.length()*mult)));
-						Vertex vert = new Vertex(str, str, x, y);
-						temp.insertEnd(vert.getName());
-						graph.addVertex(vert);
-						graph.addEdges(vertex, vert, 0, false);
-					}
-					else if (temp.getData(str) != null && !str.contains("java.lang")) {
-						Vertex vert = graph.getVertex(str);
-						graph.addEdges(vertex, vert, 0, false);
-					}
-				
-				}
-				n += (Math.PI)/4;
+				multX += 1;
+				multY += 1;
+				nX += (Math.PI)/4;
+				if(nX >= 2*Math.PI) nX = 0;
+				nY += (Math.PI);
+				if(nY >= 2*Math.PI) nY = 0;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		return drawDependencies(graph, listOfClass);
+	}
+	
+	private Graph drawDependencies(Graph graph, JSONArray listOfClass) throws JSONException, ClassFormatException, IOException {
+		for (int i = 0; i < listOfClass.length(); i++) {
+			String name = (String) ((JSONObject) listOfClass.get(i)).get("Name");
+			Vertex vertex = graph.getVertex(name);
+			
+			ClassParser classP = (ClassParser) ((JSONObject) listOfClass.get(i)).get("Class");
+			JavaClass jClass = classP.parse();
+			DependencyEmitter visitor = new DependencyEmitter(jClass);
+		    DescendingVisitor classWalker = new DescendingVisitor(jClass, visitor);
+		    classWalker.visit();
+		    
+			JSONArray arr = visitor.getJsonArr();
+			int nX = 0, nY = 0;
+			int multX = 3, multY = 3;
+			for (int j = 1; j < arr.length(); j++) {
+				String str = arr.getString(j);
+				Vertex vert = graph.getVertex(str);
+				if(vert == null && !str.contains("[")) {
+					int x = Integer.valueOf((int) Math.round(600 + Math.cos(nX)*(listOfClass.length()*multX)));
+					int y = Integer.valueOf((int) Math.round(330 + Math.sin(nY)*(listOfClass.length()*multY)));
+					vert = new Vertex(str, str, x, y);
+					graph.addVertex(vert);
+					graph.addEdges(vertex, vert, 0, false);
+					
+					nX += (Math.PI)/2;
+					nY += (Math.PI);
+					multX += 1;
+					multY+=1;
+				}
+				if (!str.contains("java.lang") && !str.contains("[") && vert != null) {
+					graph.addEdges(vertex, vert, 0, false);
+				}
+			}
+		}
 		return graph;
 	}
+	
 	/**
 	 * Metodo que extrae jars internos del principal
 	 * @param extractPath
