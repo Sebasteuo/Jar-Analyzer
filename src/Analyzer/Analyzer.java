@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import GraphStructure.Graph;
 import GraphStructure.Vertex;
-import LinkedListStructure.SimpleLinkedList;
 /**
  * Clase utilizada para analizar Jars a nivel de dependencias, entre jars internos y clases
  * @author Sebastian Alba
@@ -172,32 +171,28 @@ public class Analyzer {
 		graph.setDirected(true);
 		
 		JSONArray listOfClass = obj.getJSONArray("List of Class");
-		int nX = 0, nY = 0;
+		float n = 0;
+		int mult = 75;
 		try {
-			int multX = 15, multY = 20;
 			for (int i = 0; i < listOfClass.length(); i++) {
 				String name = (String) ((JSONObject) listOfClass.get(i)).get("Name");
 				
-			    int x = Integer.valueOf((int) Math.round(600 + Math.cos(nX)*(listOfClass.length()*multX)));
-				int y = Integer.valueOf((int) Math.round(350 + Math.sin(nY)*(listOfClass.length()*multY)));
+			    int x = Integer.valueOf((int) Math.round(800 + Math.cos(n)*mult));
+				int y = Integer.valueOf((int) Math.round(900 + Math.sin(n)*mult));
 				
 				Vertex vertex = new Vertex(name, name, x, y);
 				graph.addVertex(vertex);
 				
-				multX += 1;
-				multY += 1;
-				nX += (Math.PI)/4;
-				if(nX >= 2*Math.PI) nX = 0;
-				nY += (Math.PI);
-				if(nY >= 2*Math.PI) nY = 0;
+				mult += 25;
+				n += 2.25;
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		return drawDependencies(graph, listOfClass);
+		return drawDependencies(graph, listOfClass, mult, n);
 	}
 	
-	private Graph drawDependencies(Graph graph, JSONArray listOfClass) throws JSONException, ClassFormatException, IOException {
+	private Graph drawDependencies(Graph graph, JSONArray listOfClass, int mult, float n) throws JSONException, ClassFormatException, IOException {
 		for (int i = 0; i < listOfClass.length(); i++) {
 			String name = (String) ((JSONObject) listOfClass.get(i)).get("Name");
 			Vertex vertex = graph.getVertex(name);
@@ -209,22 +204,18 @@ public class Analyzer {
 		    classWalker.visit();
 		    
 			JSONArray arr = visitor.getJsonArr();
-			int nX = 0, nY = 0;
-			int multX = 3, multY = 3;
 			for (int j = 1; j < arr.length(); j++) {
 				String str = arr.getString(j);
 				Vertex vert = graph.getVertex(str);
-				if(vert == null && !str.contains("[")) {
-					int x = Integer.valueOf((int) Math.round(600 + Math.cos(nX)*(listOfClass.length()*multX)));
-					int y = Integer.valueOf((int) Math.round(330 + Math.sin(nY)*(listOfClass.length()*multY)));
+				if(vert == null && !str.contains("[") && !str.contains("java.lang")) {
+					int x = Integer.valueOf((int) Math.round(800 + Math.cos(n)*mult));
+					int y = Integer.valueOf((int) Math.round(900 + Math.sin(n)*mult));
 					vert = new Vertex(str, str, x, y);
 					graph.addVertex(vert);
 					graph.addEdges(vertex, vert, 0, false);
 					
-					nX += (Math.PI)/2;
-					nY += (Math.PI);
-					multX += 1;
-					multY+=1;
+					mult += 25;
+					n += 2.25;
 				}
 				if (!str.contains("java.lang") && !str.contains("[") && vert != null) {
 					graph.addEdges(vertex, vert, 0, false);
@@ -233,7 +224,6 @@ public class Analyzer {
 		}
 		return graph;
 	}
-	
 	/**
 	 * Metodo que extrae jars internos del principal
 	 * @param extractPath
