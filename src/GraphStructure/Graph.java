@@ -333,7 +333,88 @@ public class Graph {
             current = current.getNext();
         }
     }
+    /**
+     * Metodo que determina si un grafo es fuertemente conexo.
+     * @return
+     */
+    public boolean esFuertementeConexo() {
+    	Node current = adjList.getFlag();
+    	
+    	while(current != null) {
+    		SimpleLinkedList temp = (SimpleLinkedList) current.getData();
+    		Node current2 = temp.getFlag().getNext();
+    		if(current2==null) {
+    			return false;
+    		}
+    		current = current.getNext();	
+    	}
+    	current = adjList.getFlag();
+    	while(current != null) {
+    		if(esFuertementeConexo(current) == false) {
+    			return false;
+    		};
+    		current = current.getNext();
+    	}return true;	
+   
+    }
     
+    /**
+     * Metodo auxiliar que añade los nodos que pueden ser visitados desde el nodo entrante
+     * @param v
+     * @return true o false
+     */
+    private boolean esFuertementeConexo(Node v) {
+    	Node[] vertArr = new Node[numVert];
+    	SimpleLinkedList lista = (SimpleLinkedList) v.getData();
+    	Node current = lista.getFlag().getNext();
+    	int z = 0;
+    	
+    	while(current!=null) {
+    		vertArr[z] = current;
+    		z++;
+    		current = current.getNext();
+    	}
+    	
+        	
+    	for(int i=0; (numVert)>i; i++) {
+    		if(vertArr[i] == null) {
+    			return false;
+    		}
+    		else {
+    			esFuertementeConexo(vertArr[i],vertArr, z);
+    		}
+    	}
+    	return true;
+    }
+    
+    /**
+     * Metodo auxiliar que revisa las listas de adyacencia de los nodos visitados
+     * @param v
+     * @param vertArr
+     * @param z
+     */
+    private void esFuertementeConexo(Node v, Node[] vertArr, int z) {
+    	Node current2 = adjList.getFlag();
+    	Node x = null;
+    	while(current2 != null) {
+    		if(((SimpleLinkedList) current2.getData()).getFlag().equals(v)) {
+    			x=current2;
+    		}
+    		current2 = current2.getNext();
+    	}
+    	SimpleLinkedList listav = (SimpleLinkedList) x.getData();
+    	Node current = listav.getFlag().getNext();
+    	
+    	while(current!=null) {
+    		for(int i=0; (numVert)>i;i++) {
+    			if(!(vertArr[i].equals(current))){
+    				vertArr[z] = current;
+    				z++;
+    			};
+    		}
+    		current = current.getNext();
+    	}
+    }
     
     
     /**
