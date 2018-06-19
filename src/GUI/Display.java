@@ -17,7 +17,13 @@ import javax.swing.JTextField;
 
 import Analyzer.Analyzer;
 import GraphStructure.Graph;
-
+/**
+ * Pantalla principal
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ */
 @SuppressWarnings("serial")
 public class Display extends JFrame implements ActionListener {
 	
@@ -36,7 +42,9 @@ public class Display extends JFrame implements ActionListener {
 		setUpWindow();
 		initializeComponents();
 	}
-
+/**
+ * Configuracion de la ventana
+ */
 	// Configuracion de la ventana
 	private void setUpWindow() {
 		// Titulo de la ventana
@@ -52,7 +60,9 @@ public class Display extends JFrame implements ActionListener {
 	}
 
 
-	// Inicia los componentes
+	/**
+	 * Inicia los componentes
+	 */
 	private void initializeComponents() {
 		// Da valor a los componentes
 		text = new JLabel();
@@ -86,7 +96,9 @@ public class Display extends JFrame implements ActionListener {
 		this.add(iconLabel);
 	}
 
-	// Acciones de los botones
+	/**
+	 * Acciones de los botones
+	 */
 	@SuppressWarnings("unused")
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == boxanalyze) {
@@ -131,7 +143,9 @@ public class Display extends JFrame implements ActionListener {
 
 @SuppressWarnings("serial")
 class ImmovableDesktopManager extends DefaultDesktopManager {
-    
+    /**
+     * 
+     */
 	public void dragFrame(JComponent f, int newX, int newY)
     {
         if (!"fixed".equals(f.getClientProperty("dragMode")))

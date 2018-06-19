@@ -12,7 +12,14 @@ import GraphStructure.Graph;
 import GraphStructure.Vertex;
 import LinkedListStructure.Node;
 import LinkedListStructure.SimpleLinkedList;
-
+/**
+ * Dibuja el grafo
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ *
+ */
 @SuppressWarnings("serial")
 public class GraphDraw extends JPanel {
     int width;
@@ -27,7 +34,9 @@ public class GraphDraw extends JPanel {
 		width = 40;
 		height = 40;
     }
-    
+    /**
+     * Metodo encargado de dibujar los nodos y las aristas
+     */
     @Override
     public void paintComponent(Graphics g) { // Metodo encargado de dibujar los nodos y las aristas
     	super.paintComponent(g);
@@ -73,7 +82,16 @@ public class GraphDraw extends JPanel {
 		    current2 = current2.getNext();
 		}
     }
-    
+    /**
+     * Dibuja la flecha
+     * @param g
+     * @param srcX
+     * @param srcY
+     * @param destX
+     * @param destY
+     * @param width
+     * @param height
+     */
     private void drawArrowLine(Graphics g, int srcX, int srcY, int destX, int destY, int width, int height) {
         int distX = destX - srcX, distY = destY - srcY;
         double D = Math.sqrt(distX*distX + distY*distY);

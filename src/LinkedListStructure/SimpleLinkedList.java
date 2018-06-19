@@ -31,7 +31,10 @@ public class SimpleLinkedList {
         }
         return null;
     }
-    
+    /**
+     * Inserta al final
+     * @param obj
+     */
     public void insertEnd(Object obj){
         Node newNode = new Node(obj, null);
         if(head == null){
@@ -46,7 +49,10 @@ public class SimpleLinkedList {
         }
         size++;
     }
-    
+    /**
+     * Borra el nodo
+     * @param obj
+     */
     public void deleteNode(Object obj){
         try{
             Node current = head;

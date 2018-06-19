@@ -1,5 +1,12 @@
 package GraphStructure;
-
+/**
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ *
+ * Clase que define la arista
+ */
 public class Edge {
 	private Vertex src;
 	private Vertex dest;

@@ -23,7 +23,13 @@ import org.json.JSONObject;
 import GraphStructure.Graph;
 import GraphStructure.Vertex;
 import LinkedListStructure.SimpleLinkedList;
-
+/**
+ * Clase utilizada para analizar Jars a nivel de dependencias, entre jars internos y clases
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ */
 public class Analyzer {
 	private Graph graph;
 	
@@ -80,7 +86,11 @@ public class Analyzer {
 		}
 		return object;
 	}
-	
+	/**
+	 * metodo que extrae las clases que hay dentro del archivo JAR
+	 * @param jarName
+	 * @return Json Object
+	 */
 	@SuppressWarnings("resource")
 	public JSONObject analyzeClass(String jarName) {
 		JSONArray listOfClasses = new JSONArray();
@@ -121,7 +131,12 @@ public class Analyzer {
 		}
 		return object;
 	}
-	
+	/**
+	 * Configura el grafo de los JARS
+	 * @param obj
+	 * @return JSON Object
+	 * @throws JSONException
+	 */
 	private Graph setUpJarGraph(JSONObject obj) throws JSONException {
 		Graph graph = new Graph();
 		graph.setDirected(true);
@@ -147,7 +162,12 @@ public class Analyzer {
 		}
 		return graph;
 	}
-	
+	/**
+	 * Configura la clase de los JARS
+	 * @param obj
+	 * @return JSON Obejct
+	 * @throws JSONException
+	 */
 	private Graph setUpClassGraph(JSONObject obj) throws JSONException {
 		Graph graph = new Graph();
 		graph.setDirected(true);
@@ -203,7 +223,13 @@ public class Analyzer {
 		}
 		return graph;
 	}
-	
+	/**
+	 * Metodo que extrae jars internos del principal
+	 * @param extractPath
+	 * @param parentJar
+	 * @param extractee
+	 * @throws IOException
+	 */
     private File extractJarFileFromJar(String extractPath, final JarFile parentJar, final JarEntry extractee) throws IOException {
         BufferedInputStream is = new BufferedInputStream(parentJar.getInputStream(extractee));
 

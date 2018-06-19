@@ -26,7 +26,13 @@ import GraphStructure.Graph;
 import GraphStructure.Vertex;
 import LinkedListStructure.Node;
 import LinkedListStructure.SimpleLinkedList;
-
+/**
+ * Pantalla donde se muestra el grafo
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ */
 @SuppressWarnings("serial")
 public class DisplayAnalyzer extends JFrame implements ActionListener {
 	private JButton back;
@@ -39,7 +45,10 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 	private JDesktopPane dp;
 	private Graph graph;
 
-	// Constructor
+	/**
+	 * Constructor
+	 * @param graph
+	 */
 	public DisplayAnalyzer(Graph graph) {
 		super();
 		setUpWindow();
@@ -50,7 +59,9 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		generateGraph();
 	}
 
-	// Configuracion de la ventana
+	/**
+	 * Configuracion de la ventana
+	 */
 	private void setUpWindow() {
 		// Titulo de la ventana
 		this.setTitle("Jar Analyzer");
@@ -66,7 +77,9 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		this.setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
 	}
 
-	// Inicia los componentes
+	/**
+	 * Inicia los componentes
+	 */
 	private void initializeComponents() {
 		// Da valor a los componentes
 		back = new JButton();
@@ -100,7 +113,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		options.setBounds(752, 370, 200, 25);
 		options.addActionListener(this);
 		options.setFocusable(false);
-		// Añade lo componentes a la ventana
+		// Aï¿½ade lo componentes a la ventana
 		this.add(back);
 		this.add(information);
 		this.add(menu);
@@ -109,7 +122,9 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		this.add(options);
 	}
 
-	// Acciones de los botones
+	/**
+	 * Acciones de los botones
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == back) {
 			// Display display = new Display();
@@ -167,7 +182,9 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 			}
 		}
 	}
-
+	/**
+	 * Genera el grafo del archivo ingresado
+	 */
 	public void generateGraph() {
     	dp.setDesktopManager(new ImmovableDesktopManager());
     	dp.setBackground(new Color(238,238,238));
@@ -191,7 +208,11 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		
 		JIF.setVisible(true);
 	}
-	
+	/**
+	 * Convierte lista enlazada a arreglo
+	 * @param list
+	 * @return
+	 */
 	public String[] convert(SimpleLinkedList list) {
 		String[] array = new String[list.getSize()];
 		Node current = list.getFlag();
