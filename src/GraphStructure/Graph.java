@@ -133,6 +133,19 @@ public class Graph {
         }
 	}
 	
+	public Vertex getVertex(String name) {
+		Node current = getGraphVertexList().getFlag();
+		Vertex vertex;
+		while(current != null) {
+			vertex = (Vertex) current.getData();
+			if(vertex.getName().equalsIgnoreCase(name)) {
+				return vertex;
+			}
+			current = current.getNext();
+		}
+		return null;
+	}
+	
 	public SimpleLinkedList getGraphVertexList() {
 		SimpleLinkedList res = new SimpleLinkedList();
 		Node current = adjList.getFlag();
@@ -203,7 +216,7 @@ public class Graph {
 		return getRanking("REF");
 	}
 	
-	public String[][] getDependencesRanking() {
+	public String[][] getDependenciesRanking() {
 		return getRanking("DEP");
 	}
 	
