@@ -276,4 +276,75 @@ public class Graph {
             current = current.getNext();
         }
     }
+    
+    
+    
+    /**
+     * Método que determina si un gráfo es debilmente conexo.
+     * @return true o false
+     */
+    public boolean esDebilmenteConexo() {
+    	SimpleLinkedList lista = new SimpleLinkedList();
+    	Node current = adjList.getFlag();
+
+    	while(current != null) {
+    		SimpleLinkedList temp = (SimpleLinkedList) current.getData();
+    		Vertex v = (Vertex) temp.getFlag().getData();
+    		if(v.getEdgesList().getSize() > 0) {
+    			if(lista.getData(v) == null) {
+    				if(lista.getSize()==0) {
+    					esConexo(v, lista);
+    				}
+    				else {
+    					esConexo1(v, lista);
+    				}
+    			}
+    		}
+    		current = current.getNext();
+    	}
+    	if (lista.getSize() != getGraphVertexList().getSize())
+    		return false;
+    	return true;
+    	}
+    	
+    	/**
+    	 * Método auxiliar que insertaba en la lista cuando esta está vacía
+    	 * @param v
+    	 * @param lista
+    	 */
+    	private void esConexo(Vertex v, SimpleLinkedList lista) {
+    		Node current = v.getEdgesList().getFlag();
+    		
+    		if (lista.getData(v) == null) {
+    			lista.insertEnd(v);
+    			}
+    		
+    		while(current!=null) {
+    			Edge e = (Edge) v.getEdgesList().getData(current.getData());
+    			if(!(e.getDest().equals(v))) {
+    				if(lista.getData(e.getDest()) == null) {
+    					esConexo(e.getDest(), lista);
+    				}
+    			}
+    			current = current.getNext();
+    			
+    		}
+    	}
+    	
+    	/**
+    	 * Método auxiliar que verifica las aristas
+    	 * @param v
+    	 * @param lista
+    	 */
+    	public void esConexo1 (Vertex v, SimpleLinkedList lista){
+    		Node current = v.getEdgesList().getFlag();
+    		while(current != null) {
+    			Edge e = (Edge) v.getEdgesList().getData(current.getData());
+    			if(lista.getData(e.getDest()) != null) {
+    				esConexo(v,lista);
+    				break;
+    			}
+    		}
+    		current = current.getNext();
+    	}
 }
