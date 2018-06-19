@@ -26,8 +26,10 @@ import GraphStructure.Graph;
 import GraphStructure.Vertex;
 import LinkedListStructure.Node;
 import LinkedListStructure.SimpleLinkedList;
+
 /**
  * Pantalla donde se muestra el grafo
+ * 
  * @author Sebastian Alba
  * @author Randal Mendez
  * @author David Pereira
@@ -47,6 +49,7 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param graph
 	 */
 	public DisplayAnalyzer(Graph graph) {
@@ -92,25 +95,26 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		information
 				.setText("<html><body>Outgoing Grade: <br>" + graph.getOutputDegree(menu.getSelectedItem().toString())
 						+ "<br>Incoming Grade: <br>" + graph.getInputDegree(menu.getSelectedItem().toString())
-						+ "<br>Connected Graph: <br>" + nodes[0] + "</body></html>");
-		information.setBounds(752, 50, 250, 210);
+						+ "<br>Connected Graph:<br> Weakly: <br>" + validacion(graph.esDebilmenteConexo())
+						+ "<br>Strongly<br>" + validacion(graph.esFuertementeConexo()) + "</body></html>");
+		information.setBounds(752, 50, 250, 310);
 		information.setFont(new Font("Impact", Font.PLAIN, 27));
 		back.setText("Back");
 		back.setBounds(875, 625, 100, 25);
 		back.addActionListener(this);
 		back.setFocusable(false);
 		rankingD.setText("Dependencies Ranking");
-		rankingD.setBounds(752, 280, 200, 25);
+		rankingD.setBounds(752, 370, 200, 25);
 		rankingD.addActionListener(this);
 		rankingD.setFocusable(false);
 		rankingR.setText("References Ranking");
-		rankingR.setBounds(752, 325, 200, 25);
+		rankingR.setBounds(752, 415, 200, 25);
 		rankingR.addActionListener(this);
 		rankingR.setFocusable(false);
 		menu.setBounds(752, 20, 200, 25);
 		menu.addActionListener(this);
 		options.setText("Class Graph");
-		options.setBounds(752, 370, 200, 25);
+		options.setBounds(752, 460, 200, 25);
 		options.addActionListener(this);
 		options.setFocusable(false);
 		// A�ade lo componentes a la ventana
@@ -135,7 +139,8 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 			information.setText(
 					"<html><body>Outgoing Grade: <br>" + graph.getOutputDegree(menu.getSelectedItem().toString())
 							+ "<br>Incoming Grade: <br>" + graph.getInputDegree(menu.getSelectedItem().toString())
-							+ "<br>Connected Graph: <br>" + menu.getSelectedItem() + "</body></html>");
+							+ "<br>Connected Graph: <br> Weakly: <br>" + validacion(graph.esDebilmenteConexo())
+							+ "<br>Strongly<br>" + validacion(graph.esFuertementeConexo()) + "</body></html>");
 		}
 		if (e.getSource() == rankingD) {
 			Object[] cols = { "Position", "Name", "Quantity" };
@@ -166,7 +171,8 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 		if (e.getSource() == options) {
 			if (options.getText() == "Class Graph") {
 				try {
-					Analyzer analyzer = new Analyzer(graph.getVertex(menu.getSelectedItem().toString()).getData().toString(), "CLASS");
+					Analyzer analyzer = new Analyzer(
+							graph.getVertex(menu.getSelectedItem().toString()).getData().toString(), "CLASS");
 					this.graph = analyzer.getGraph();
 					generateGraph("CLASS");
 					options.setText("Jar Graph");
@@ -182,39 +188,45 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 			}
 		}
 	}
+
 	/**
 	 * Genera el grafo del archivo ingresado
 	 */
 	public void generateGraph(String choice) {
-    	dp.setDesktopManager(new ImmovableDesktopManager());
-    	dp.setBackground(new Color(238,238,238));
-    	this.getContentPane().add(dp);
-		
-    	JInternalFrame JIF = new JInternalFrame();
-    	JIF.setBorder(null);
+		dp.setDesktopManager(new ImmovableDesktopManager());
+		dp.setBackground(new Color(238, 238, 238));
+		this.getContentPane().add(dp);
+
+		JInternalFrame JIF = new JInternalFrame();
+		JIF.setBorder(null);
 		GraphDraw draw = new GraphDraw(this.graph);
-		if(choice.equals("JAR")) draw.setPreferredSize(new Dimension(1500,1000));
-		else draw.setPreferredSize(new Dimension(2000,1500));
+		if (choice.equals("JAR"))
+			draw.setPreferredSize(new Dimension(1500, 1000));
+		else
+			draw.setPreferredSize(new Dimension(2000, 1500));
 		JIF.add(draw);
-		JScrollPane JSP = new JScrollPane(draw, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		JScrollPane JSP = new JScrollPane(draw, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		JIF.getContentPane().add(JSP);
 		JIF.pack();
-		JIF.setSize(750,661);
+		JIF.setSize(750, 661);
 		JIF.putClientProperty("dragMode", "fixed");
 		dp.add(JIF);
-		
+
 		this.setSize(1000, 700);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		JIF.setVisible(true);
 	}
+
 	/**
 	 * Convierte lista enlazada a arreglo
+	 * 
 	 * @param list
 	 * @return
 	 */
-	public String[] convert(SimpleLinkedList list) {
+	private String[] convert(SimpleLinkedList list) {
 		String[] array = new String[list.getSize()];
 		Node current = list.getFlag();
 		int contador = 0;
@@ -224,6 +236,20 @@ public class DisplayAnalyzer extends JFrame implements ActionListener {
 			contador++;
 		}
 		return array;
+	}
+
+	/**
+	 * Convierte un boolean en string
+	 * 
+	 * @param b
+	 * @return
+	 */
+	private String validacion(boolean b) {
+		if (b == true) {
+			return "Yes";
+		} else {
+			return "No";
+		}
 	}
 
 }
