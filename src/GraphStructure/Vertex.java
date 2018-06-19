@@ -2,7 +2,13 @@ package GraphStructure;
 
 import LinkedListStructure.Node;
 import LinkedListStructure.SimpleLinkedList;
-
+/**
+ * Clase que define el vertice
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ */
 public class Vertex {
 	private Object data;
 	private SimpleLinkedList edges;
@@ -73,12 +79,15 @@ public class Vertex {
 	public void setCoordY(int coordY) {
 		this.coordY = coordY;
 	}
-
+/**
+ * Añade el arista
+ * @param dest
+ * @param weight
+ */
 	public void addEdge(Vertex dest, int weight) {
 		Edge newEdge = new Edge(this, dest, weight);
 		this.edges.insertEnd(newEdge);
 	}
-	
 	public Edge getEdge(Vertex dest) {
 		Node current = edges.getFlag();
 		while(current != null) {
@@ -90,7 +99,10 @@ public class Vertex {
 		}
 		return null;
 	}
-	
+	/**
+	 * Borra el arista
+	 * @param edge
+	 */
 	public void removeEdge(Edge edge) {
 		Node current = edges.getFlag();
 		while (current != null) {

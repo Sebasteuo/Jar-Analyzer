@@ -2,7 +2,14 @@ package GraphStructure;
 
 import LinkedListStructure.Node;
 import LinkedListStructure.SimpleLinkedList;
-
+/**
+ * Define el grafo
+ * @author Sebastian Alba
+ * @author Randal Mendez
+ * @author David Pereira
+ * @author Jose Cespedes
+ *
+ */
 public class Graph {
 
 	private int numVert;
@@ -40,14 +47,23 @@ public class Graph {
 	public void setDirected(boolean isDirected) {
 		this.isDirected = isDirected;
 	}
-
+	/**
+	 * AÃ±ade el vertice
+	 * @param vertex
+	 */
 	public void addVertex(Vertex vertex) {
 		SimpleLinkedList SLL = new SimpleLinkedList();
 		SLL.insertEnd(vertex);
 		adjList.insertEnd(SLL);	
 		numVert++;
 	}
-	
+	/**
+	 * AÃ±ade Aristas
+	 * @param src
+	 * @param dest
+	 * @param weight
+	 * @param bool
+	 */
 	public void addEdges(Vertex src, Vertex dest, int weight, boolean bool) {
 		Node current = adjList.getFlag();
 		while(current != null) {
@@ -64,7 +80,10 @@ public class Graph {
 		}
 		numEdges++;
 	}
-	
+	/**
+	 * Borra Vertices
+	 * @param vertex
+	 */
 	public void removeVertex(Vertex vertex) {
 		Node current = adjList.getFlag();
 		while(current != null) {
@@ -83,7 +102,11 @@ public class Graph {
 		}
 		this.numVert--;
 	}
-	
+	/**
+	 * Borra Aristas
+	 * @param src
+	 * @param dest
+	 */
 	public void removeEdge(Vertex src, Vertex dest) {
 		Node current = adjList.getFlag();
 		while(current != null) {
@@ -99,7 +122,10 @@ public class Graph {
 			}
 		}		
 	}
-	
+	/**
+	 * 
+	 * @param src
+	 */
 	public void breadthFirst(Vertex src) {
 		// Crea una lista con los nodos no visitados, en un principio ninguno ha sido visitado
 		// Por lo tanto, la iguala a la lista de adyacencia.
@@ -132,7 +158,11 @@ public class Graph {
             }
         }
 	}
-	
+	/**
+	 * Obtiene el vertice
+	 * @param name
+	 * @return Nombre
+	 */
 	public Vertex getVertex(String name) {
 		Node current = getGraphVertexList().getFlag();
 		Vertex vertex;
@@ -145,7 +175,10 @@ public class Graph {
 		}
 		return null;
 	}
-	
+	/**
+	 * Obtiene lista de vertices del grafo
+	 * @return lista
+	 */
 	public SimpleLinkedList getGraphVertexList() {
 		SimpleLinkedList res = new SimpleLinkedList();
 		Node current = adjList.getFlag();
@@ -156,7 +189,10 @@ public class Graph {
 		}
 		return res;
 	}
-	
+	/**
+	 * Obtiene lista de aristas del grafo
+	 * @return lista
+	 */
 	public SimpleLinkedList getGraphEdgesList() {
 		SimpleLinkedList res = new SimpleLinkedList();
 		Node current = adjList.getFlag();
@@ -173,7 +209,11 @@ public class Graph {
 		}
 		return res;
 	}
-	
+	/**
+	 * Obtiene grado entrante del vertice
+	 * @param name
+	 * @return nombre
+	 */
 	public int getInputDegree(String name) {
 		int inputDegree = 0;
 		Node current = this.adjList.getFlag();
@@ -192,7 +232,11 @@ public class Graph {
 		}
 		return inputDegree;
 	}
-	
+	/**
+	 * Obtiene el grado saliente del vertice
+	 * @param name
+	 * @return nombre
+	 */
 	public int getOutputDegree(String name) {
 		int outputDegree = 0;
 		Node current = this.adjList.getFlag();
@@ -207,19 +251,30 @@ public class Graph {
 		}
 		return outputDegree;
 	}
-	
+	/**
+	 * Retorna boolean si es conexo
+	 * @return boolean
+	 */
 	public boolean isRelated() {
 		return true;
 	}
-	
+	/**
+	 * Obtiene ramking de referencias
+	 */
 	public String[][] getReferencesRanking() {
 		return getRanking("REF");
 	}
-	
+	/**
+	 * Obtiene ranking de dependencias
+	 */
 	public String[][] getDependenciesRanking() {
 		return getRanking("DEP");
 	}
-	
+	/**
+	 * Obtiene ranking de dependencias o referencias segun parametro de entrada
+	 * @param ranking
+	 * @return ranking
+	 */
 	private String[][] getRanking(String ranking) {
 		SimpleLinkedList temp = new SimpleLinkedList();
 		String[][] res = new String[adjList.getSize()][3];
@@ -258,7 +313,9 @@ public class Graph {
 		}
 		return res;
 	}
-	
+	/**
+	 * Imprime el grafo
+	 */
     public void printGraph(){
     	Node current = adjList.getFlag();
         while(current != null){
@@ -280,7 +337,7 @@ public class Graph {
     
     
     /**
-     * Método que determina si un gráfo es debilmente conexo.
+     * Metodo que determina si un grafo es debilmente conexo.
      * @return true o false
      */
     public boolean esDebilmenteConexo() {
@@ -308,7 +365,7 @@ public class Graph {
     	}
     	
     	/**
-    	 * Método auxiliar que insertaba en la lista cuando esta está vacía
+    	 * Metodo auxiliar que insertaba en la lista cuando esta esta vacia
     	 * @param v
     	 * @param lista
     	 */
@@ -332,7 +389,7 @@ public class Graph {
     	}
     	
     	/**
-    	 * Método auxiliar que verifica las aristas
+    	 * Metodo auxiliar que verifica las aristas
     	 * @param v
     	 * @param lista
     	 */
